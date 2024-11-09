@@ -13,4 +13,4 @@ def test_add_to_cart(page, username, password):
     inventory_page.add_to_cart()
     inventory_page.go_to_cart()
 
-    assert page.locator(".shopping_cart_badge").inner_text() == "1"
+    assert page.locator(inventory_page.cart_link).inner_text() == "1"
