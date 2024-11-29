@@ -1,10 +1,6 @@
 name: Python Package
 
-on:
-  push:
-    branches: [ lab4 ]
-  pull_request:
-    branches: [ lab4 ]
+on: [push, pull_request]
 
 jobs:
   build:
