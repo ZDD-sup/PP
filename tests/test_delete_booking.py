@@ -2,6 +2,7 @@ import pytest
 from cod.booking_api import BookingAPI
 from cod.auth_api import AuthAPI
 from cod.helpers import match_schema
+from cod.test_data import test_data
 
 class TestDeleteBooking:
 
@@ -11,23 +12,13 @@ class TestDeleteBooking:
         cls.booking_api = BookingAPI()
         cls.booking_id = None
 
-        auth_response = cls.auth_api.get_token()
+        auth_response = cls.auth_api.get_token(username=test_data["auth"]["username"], password=test_data["auth"]["password"])
         assert auth_response.status_code == 200, "Не удалось получить токен"
         auth_json = auth_response.json()
         assert match_schema(auth_json, 'schemas/auth_schema.json'), "Схема ответа токена не соответствует ожиданиям"
         cls.token = auth_json.get('token')
 
-        payload = {
-            "firstname": "Alexander",
-            "lastname": "Grigor",
-            "totalprice": 250,
-            "depositpaid": True,
-            "bookingdates": {
-                "checkin": "2024-09-01",
-                "checkout": "2024-09-10"
-            },
-            "additionalneeds": "Breakfast"
-        }
+        payload = test_data["booking"]["delete"]
         create_response = cls.booking_api.create_booking(payload)
         assert create_response.status_code == 200, "Не удалось создать бронирование для удаления"
         create_json = create_response.json()
@@ -43,5 +34,4 @@ class TestDeleteBooking:
 
     @classmethod
     def teardown_class(cls):
-
         pass
